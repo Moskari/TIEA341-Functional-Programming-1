@@ -1,0 +1,51 @@
+
+Show that no f xs ==> null (filter f xs), where the ==> is material implication:
+
+
+filter p []    = []               --filter.1
+filter p (x:xs)                   --filter.2
+  | p x        = x : filter p xs
+  | otherwise  = filter p xs
+
+null [] = True                    --null.1
+null _ = False                    --null.2
+
+no p [] = True                    --no.1
+no p (x:xs)                       --no.2
+  | p x = False
+  | otherwise = no p xs
+
+True ==> False = False            --(==>).1
+_    ==> _     = True             --(==>).2
+
+Empty case:
+no f [] ==> null (filter f [])
+== {- filter.1 -}
+no f [] ==> null []
+== {- no.1 and null.1 -}
+True ==> True
+== {- (==>).2 -}
+True
+
+Proof: no f (x:xs) ==> null (filter f (x:xs))
+Assumption: no f xs ==> null (filter f xs)
+
+Non-empty case, first branch (p x):
+no f (x:xs) ==> null (filter f (x:xs))
+== {- no.2, filter.2 -}
+False ==> null (x: filter f xs)
+== {- null.2, list is non-empty -}
+False ==> False
+== {- (==>).2 -}
+True
+
+Non-empty case, second branch (otherwise):
+no f (x:xs) ==> null (filter f (x:xs))
+== {- no.2, filter.2 -}
+no f xs ==> null (filter f xs)
+== {- Assumption -}
+null (filter f xs) ==> null (filter f xs)
+== {- (==>).2, same value on the both sides of implication ->
+True
+
+

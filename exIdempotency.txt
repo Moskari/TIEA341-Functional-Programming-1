@@ -1,0 +1,105 @@
+module exIdempotency where
+
+destutter :: Eq a => [a] -> [a]
+destutter []         = []                --destutter.1
+destutter (x0:x1:xs) = case x0 == x1 of  --destutter.2
+  True -> destutter (x1:xs)
+  False -> x0:destutter (x1:xs)
+
+destutter (x0:xs)   = [x0]               --destutter.3
+
+
+-- lemma slurp
+destutter (x : xs) == y : ys ==> x == y
+
+
+True ==> False = False            --(==>).1
+_    ==> _     = True             --(==>).2
+
+
+-- Lemma proof
+--------------
+-- 1 item case -- AJK approves
+destutter(x:[]) == y:[] ==> x == y
+== {- destutter.3 -}
+x:[] == y:[] ==> x == y
+== {- (==>).2, both sides are the same -}
+True
+
+-- assume:         destutter (x0 : xs) == y : ys ==> x0 == y
+-- induction step: destutter (x0 : x1 : xs) == y : ys ==> x0 == y
+
+-- N items case
+-- True branch (x0 == x1)
+destutter(x0:x1:xs) == y:ys ==> x0 == y
+== {- destutter.2, True branch -}
+destutter(x1:xs) == y:ys ==> x0 == y
+== {- Lemma assumption -}
+x1 == y ==> x0 == y
+== {- Assumption (x0 == x1) -}
+p ==> p
+==
+True
+
+
+-- N items camse
+-- False branch (x0 != x1)
+destutter(x0:x1:xs) == y:ys ==> x0 == y
+== {- destutter.2 -}
+x0:destutter (x1:xs) == y:ys ==> x0 == y
+== {- ys = destutter(x1:xs) -}
+x0:ys == y:ys ==> x0 == y
+== {- inversion -}
+x0 == y ==> x0 == y
+== {- (==>).2 -}
+True
+
+
+
+
+
+
+
+
+--Destutter proof
+-----------------
+
+--Proof: destutter (destutter xs) == destutter xs
+
+--Empty case:
+destutter (destutter [])
+== {- destutter.1 -}
+destutter []
+
+--1 item case:
+destutter (destutter [x])
+== {- destutter.3 -}
+destutter [x]
+
+--N items case, True branch (x0 == x1):
+-- assume: destutter (destutter (x1:xs)) = destutter (x1:xs)
+-- prove: destutter (destutter (x0:x1:xs)) = destutter (x0:x1:xs)
+
+destutter (destutter (x0:x1:xs))
+== {- destutter.2, True branch -}
+destutter (destutter (x1:xs))
+== {- Assumption -}
+destutter (x1:xs)
+== {- destutter.2, in reverse -}
+destutter (x1:x1:xs)
+== -- branch assumption
+destutter (x0:x1:xs)
+
+
+--N items case, False branch:
+destutter (destutter (x0:x1:xs))
+== {- destutter.2, False branch -}
+destutter (x0:destutter (x1:xs))
+== {- lemma slurp, destutter.2 -}
+x0:destutter (destutter (x1:xs))
+== {- Assumption  -}
+x0:destutter (x1:xs)
+== {- destutter.2, in reverse -}
+destutter (x0:x1:xs)
+
+

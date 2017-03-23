@@ -1,0 +1,28 @@
+a.
+reverseWords :: String -> String
+
+reverseWords "monni ui"
+==
+"innom iu"
+
+b.
+countEmptyLines :: String -> Int
+
+countEmptyLines "monni\nui\n\niloisesti"
+==
+1
+
+c.
+applyToString :: (String -> String) -> String -> String
+
+applyToString (\x -> x ++ "!") "monni ui iloisesti"
+==
+"monni! ui! iloisesti!"
+
+d.
+sortBy :: (a -> a -> Ordering) -> [a] -> [a]
+(comparing :: Ord a => (b -> a) -> b -> b -> Ordering)
+
+sortBy (comparing length) [[3,2,1],[2,1],[1]]
+==
+[[1],[2,1],[3,2,1]]

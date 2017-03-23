@@ -1,0 +1,82 @@
+Exercise -- Syntax and typing of basic IO
+
+The goal of this exercise is to familiarise you to how valid IO statements are constructed. To do that, read through the worked example above. Then, identify
+
+main = do
+    putStr   "Pick a natural number less than 10,"
+    putStrLn "and I'll try to guess what it is!"
+
+    let loop :: Int -> Int -> IO ()
+        loop a b 
+         | a==b      = putStrLn ("The number is "++show a)
+         | otherwise = do 
+                        let try = (a + b) `div` 2
+                        putStrLn ("Is it more than "
+                                 ++ show try
+                                 ++ " ? (True/False)")
+                        isGreater <- getLine 
+                        if (read isGreater)
+                             then loop (try + 1) b
+                             else loop a       try
+    loop 1 10
+    putStrLn "Thanks for playing"
+
+
+
+
+a.    The do blocks present in the code.
+
+Ensimmäinen do on käytännössä pääohjelma.
+Toinen do kutsuu lokaalia funktiota, joka puolittaa rekursiivisesti numeron haun ja mahdollistaa käyttäjän syötteen lukemisen.
+
+b.    The individual statements in each do block.
+c.    The statement kinds (ie. are they plain actions, binds, or pure bindings.)
+
+Statementit merkittynä alla:
+
+main = do
+    putStr   "Pick a natural number less than 10,"  -- Statement, plain action
+    putStrLn "and I'll try to guess what it is!"    -- Statement, plain action
+
+    let loop :: Int -> Int -> IO () -- Pure binding
+        loop a b 
+         | a==b      = putStrLn ("The number is "++show a)
+         | otherwise = do 
+                        let try = (a + b) `div` 2 -- Pure binding
+                        putStrLn ("Is it more than "
+                                 ++ show try
+                                 ++ " ? (True/False)") -- Statement, plain action
+                        isGreater <- getLine -- Bind statement
+                        -- returns statement
+                        if (read isGreater)
+                             then loop (try + 1) b
+                             else loop a       try
+    loop 1 10 -- Statement, plain action
+    putStrLn "Thanks for playing" -- Statement, plain action
+
+
+d.    Types for each statement of the program. (Ie. in isGreater <- getLine, you should give type for isGreater and for getLine).
+
+
+
+main = do
+    putStr   "Pick a natural number less than 10," -- :: String -> IO()
+    putStrLn "and I'll try to guess what it is!"   -- ::String -> IO()
+
+    let loop :: Int -> Int -> IO ()
+        loop a b
+         | a==b      = putStrLn ("The number is "++show a)
+         | otherwise = do 
+                        let try = (a + b) `div` 2 -- ::Int
+                        putStrLn ("Is it more than "
+                                 ++ show try
+                                 ++ " ? (True/False)") -- ::IO()
+                        isGreater <- getLine -- isGreater :: String; getLine :: IO String
+                        if (read isGreater) -- read :: Read a => String -> a, if ... then ... else ... :: IO()
+                             then loop (try + 1) b
+                             else loop a       try
+    loop 1 10 -- :: Int -> Int -> IO()
+    putStrLn "Thanks for playing" -- String -> IO()
+
+
+
