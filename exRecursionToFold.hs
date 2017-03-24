@@ -5,22 +5,15 @@ import Data.List
 --foldl' f (!z) (x:xs) = foldl f (f z x) xs
 
 
+
 length' :: [a] -> Int
-length' a = foldr (\x -> (1+)) 0 a
+--length' a = foldr (\x -> (1+)) 0 a  -- alternative
+length' a = foldl' (\x -> \y -> 1+x) 0 a
 
 concat' :: [[a]] -> [a]
 concat' a = foldr (++) [] a
 
 {-
-data AlreadyErased = Erased | NotErased
-remove' :: Eq a => a -> [a] -> [a]
-remove' r = fst . foldr op ([], NotErased)
-  where
-    op first (xs, Erased) = (first:xs, Erased)
-    op first (xs, NotErased)
-      | first == r = 
--}
-
 data AlreadyErased = Erased | NotErased
 remove' :: Eq a => a -> [a] -> [a]
 remove' x = post . foldr op empty
@@ -31,6 +24,15 @@ remove' x = post . foldr op empty
              | first == x = (erasedTail,Erased)
              | otherwise  = (first:erasedTail,NotErased)
    empty    = ([],NotErased)
+-}
+remove' :: Eq a => a -> [a] -> [a] 
+remove' x = g . foldr f e
+    where 
+      g = fst
+      f first ~(erased, origRest)
+        | first == x = (origRest, first:origRest)
+        | otherwise  = (first:erased, first:origRest)
+      e = ([],[])
 
 find' :: (a->Bool) -> [a] -> Maybe a
 find' func = g . foldr f e
