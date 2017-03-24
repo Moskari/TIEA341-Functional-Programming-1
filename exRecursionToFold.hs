@@ -8,7 +8,7 @@ import Data.List
 
 length' :: [a] -> Int
 --length' a = foldr (\x -> (1+)) 0 a  -- alternative
-length' a = foldl' (\x -> \y -> 1+x) 0 a
+length' a = foldl' (\x -> \_ -> 1+x) 0 a
 
 concat' :: [[a]] -> [a]
 concat' a = foldr (++) [] a
