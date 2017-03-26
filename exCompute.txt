@@ -1,0 +1,58 @@
+Exercise -- Practice evaluating expressions
+
+areaOfBigCircle       =  pi * 10 ** 2
+greeting              =  "Hello "  ++  "Jill"
+enthusiasticGreeting  =  greeting  ++  "!" 
+bothTrue True True    = True                 --bothTrue.1
+bothTrue _    _       = False                --bothTrue.2
+allTrue               = foldr bothTrue True 
+foldr f z []          = z                    -- foldr.1
+foldr f z (x:xs)      = f x (foldr f z xs)   -- foldr.2
+
+
+
+a.
+
+(pi = 3.1415)
+
+areaOfBigCircle
+==
+(pi * (10 ** 2))
+==
+(pi * 100)
+=
+3.1415 * 100
+==
+314.15
+
+b.
+
+enthusiasticGreeting
+==
+greeting ++ "!"
+==
+"Hello " ++ "Jill" ++ "!"
+==
+"Hello Jill" ++ "!"
+==
+"Hello Jill!"
+
+c.
+
+allTrue [True,True,False]
+==
+foldr bothTrue True [True,True,False]
+== {- foldr.2 -}
+bothTrue True (foldr bothTrue True [True,False])
+== {- foldr.2 -}
+bothTrue True (bothTrue True (foldr bothTrue True [False]))
+== {- foldr.2 -}
+bothTrue True (bothTrue True (bothTrue False (foldr bothTrue True [])))
+== {- foldr.1 -}
+bothTrue True (bothTrue True (bothTrue False (True)))
+== {- bothTrue.2 -}
+bothTrue True (bothTrue True (False))
+== {- bothTrue.2 -}
+bothTrue True (False)
+== {- bothTrue.2 -}
+False
