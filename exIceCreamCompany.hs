@@ -24,10 +24,7 @@ data Salary = Salary Performance deriving (Show, Eq)
 data Employee = Employee Name JobTitle Contact PayAccount Salary Performance deriving (Eq, Show)
 -- Example: Employee (Name "Matti" "Meikalainen") Kesähessu (Contact (PhoneNumber "04012345") (Address (Name "Matti" "Meikalainen") (Street "Turhakatu 1") (PO 4040))) (PayAccount "1001010-1233") (Salary (Sandwiches 13))
 
-
-data Employees = Employees [Employee] deriving (Show)
-
-
-data Booth = Booth Employee Location deriving (Show, Eq)
+data Booth = Booth Employee Location 
+           | EmptyBooth Location deriving (Show, Eq)
 
 data ProtocolName = HTTP | FTP deriving (Show, Eq)
